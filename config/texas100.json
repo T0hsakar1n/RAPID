@@ -1,0 +1,12 @@
+{
+    "dataset_name": "texas100",
+    "model_name": "columnfc",
+    "epochs": 50,
+    "attack_epochs": 150,
+    "num_cls": 100,
+    "input_dim": 6169,
+    "optimizer": "sgd",
+    "scheduler": "cosine",
+    "lr": 0.1,
+    "weight_decay": 5e-4
+}

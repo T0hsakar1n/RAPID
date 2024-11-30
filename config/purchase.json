@@ -1,0 +1,12 @@
+{
+    "dataset_name": "purchase100",
+    "model_name": "columnfc",
+    "epochs": 50,
+    "attack_epochs": 150,
+    "num_cls": 100,
+    "input_dim": 600,
+    "optimizer": "sgd",
+    "scheduler": "cosine",
+    "lr": 0.1,
+    "weight_decay": 5e-4
+}

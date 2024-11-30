@@ -1,0 +1,12 @@
+{
+    "dataset_name": "news",
+    "model_name": "columnfc",
+    "epochs": 50,
+    "attack_epochs": 150,
+    "num_cls": 20,
+    "input_dim": 134410,
+    "optimizer": "sgd",
+    "scheduler": "cosine",
+    "lr": 0.1,
+    "weight_decay": 5e-4
+}

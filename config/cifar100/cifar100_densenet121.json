@@ -1,0 +1,12 @@
+{
+    "dataset_name": "cifar100",
+    "model_name": "densenet121",
+    "epochs": 150,
+    "attack_epochs": 150,
+    "num_cls": 100,
+    "input_dim": 3,
+    "optimizer": "sgd",
+    "scheduler": "cosine",
+    "lr": 0.1,
+    "weight_decay": 5e-4
+}

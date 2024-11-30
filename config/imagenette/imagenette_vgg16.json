@@ -1,0 +1,12 @@
+{
+    "dataset_name": "imagenette",
+    "model_name": "vgg16",
+    "epochs": 200,
+    "attack_epochs": 200,
+    "num_cls": 100,
+    "input_dim": 3,
+    "optimizer": "sgd",
+    "scheduler": "cosine",
+    "lr": 0.1,
+    "weight_decay": 5e-4
+}
