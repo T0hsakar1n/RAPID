@@ -1,6 +1,6 @@
 # RAPID
 
-This official repository contains the source code and scripts for the paper "*[Is Difficulty Calibration All We Need? Towards More Practical Membership Inference Attacks](https://dl.acm.org/doi/10.1145/3658644.3690316)*," accepted by [ACM CCS 2024](https://www.sigsac.org/ccs/CCS2024/home.html), authored by Yu He, Boheng Li, and Yao Wang et al. 
+This official repository contains the source code and scripts for the paper "*[Is Difficulty Calibration All We Need? Towards More Practical Membership Inference Attacks](https://arxiv.org/abs/2409.00426)*," accepted by [ACM CCS 2024](https://www.sigsac.org/ccs/CCS2024/home.html), authored by Yu He, Boheng Li, and Yao Wang et al. 
 
 In this paper, we propose RAPID (**R**e-lever**A**ging original membershi**P** scores to m**I**tigate errors in **D**ifficulty calibration), a novel framework for Membership Inference Attacks (MIAs). It provides a practical and effective approach to better understand and mitigate the risks posed by MIAs, achieving significant advancements in precision and computational efficiency.
 
@@ -20,8 +20,8 @@ To set up the environment, follow these three steps:
 
 1. Clone this repository 
 ```bash
-git clone https://github.com/T0hsakar1n/Is-Difficulty-Calibration-All-We-Need-Towards-More-Practical-Membership-Inference-Attacks.git
-cd Is-Difficulty-Calibration-All-We-Need-Towards-More-Practical-Membership-Inference-Attacks
+git clone https://github.com/T0hsakar1n/RAPID.git
+cd RAPID
 ```
 
 2. Install CUDA 12.1, pytorch 2.0.1, python 3.9 within a `conda` virtual environment.
@@ -82,8 +82,8 @@ python plot.py 0 config/cifar10/cifar10_vgg16.json --attacks rapid_attack
 
 The following commands demonstrate how to perform RAPID in a LiRA-like setting ([Carlini et al., IEEE S&P 22](https://ieeexplore.ieee.org/abstract/document/9833649/)):
 ```bash
-python refer_model_online.py 0 config/cifar10/cifar10_vgg16.json --model_num 64 --state victim
-python refer_model_online.py 0 config/cifar10/cifar10_vgg16.json --model_num 64 --state shadow
+python refer_model_online.py config/cifar10/cifar10_vgg16.json --device 0 --model_num 64 --state victim
+python refer_model_online.py config/cifar10/cifar10_vgg16.json --device 0 --model_num 64 --state shadow
 python mia_attack_online.py 0 config/cifar10/cifar10_vgg16.json --model_num 64 --query_num 8
 ```
 Regarding the specific reasons for evaluating RAPID in this setting, please refer to our original paper ( ◠‿◠ ).
@@ -97,14 +97,13 @@ If you've found a bug or are having trouble getting code to work, please feel fr
 Our code is built upon the official repositories of [Membership Inference Attacks and Defenses in Neural Network Pruning](https://github.com/Machine-Learning-Security-Lab/mia_prune) (Yuan et al., USENIX Sec 22) and [Membership Inference Attacks by Exploiting Loss Trajectory](https://github.com/DennisLiu2022/Membership-Inference-Attacks-by-Exploiting-Loss-Trajectory) (Liu et al., ACM CCS 22). We sincerely appreciate their valuable contributions to the community.
 
 ## Citation
+
 If you find our work helpful in your research, please cite it using the following bibtex:
 ```bibtex
 @inproceedings{he2024difficulty,
-title = {Is Difficulty Calibration All We Need? Towards More Practical Membership Inference Attacks},
-author = {He, Yu and Li, Boheng and Wang, Yao and Yang, Mengda and Wang, Juan and Hu, Hongxin and Zhao, Xingyu},
-year = {2024},
-booktitle = {Proceedings of the 2024 on ACM SIGSAC Conference on Computer and Communications Security},
-pages = {1226–1240},
-numpages = {15},
+      title={Is Difficulty Calibration All We Need? Towards More Practical Membership Inference Attacks}, 
+      author={He, Yu and Li, Boheng and Wang, Yao and Yang, Mengda and Wang, Juan and Hu, Hongxin and Zhao, Xingyu},
+      booktitle={CCS},
+      year={2024},
 }
 ```
