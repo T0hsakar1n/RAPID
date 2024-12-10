@@ -159,83 +159,84 @@ def main(args):
         rapid_shadow_out_model_list.append(torch.cat(rapid_shadow_out_confidence_list, dim = 1).mean(dim=1, keepdim=True))
 
 
-        rapid_victim_in_confidences_tensor = torch.stack(rapid_victim_in_model_list, dim=1) 
-        rapid_victim_out_confidences_tensor = torch.stack(rapid_victim_out_model_list, dim=1) 
-        rapid_shadow_in_confidences_tensor = torch.stack(rapid_shadow_in_model_list, dim=1) 
-        rapid_shadow_out_confidences_tensor = torch.stack(rapid_shadow_out_model_list, dim=1) 
+    rapid_victim_in_confidences_tensor = torch.stack(rapid_victim_in_model_list, dim=1) 
+    rapid_victim_out_confidences_tensor = torch.stack(rapid_victim_out_model_list, dim=1) 
+    rapid_shadow_in_confidences_tensor = torch.stack(rapid_shadow_in_model_list, dim=1) 
+    rapid_shadow_out_confidences_tensor = torch.stack(rapid_shadow_out_model_list, dim=1) 
         
 ##------------------------------------------------------------##       
 
-        results_part1 = rapid_victim_in_confidences_tensor
-        results_part2 = rapid_victim_out_confidences_tensor
+    results_part1 = rapid_victim_in_confidences_tensor
+    results_part2 = rapid_victim_out_confidences_tensor
 
-        datalist = victim_train_list + victim_test_list
-        point_path = f"{base_folder}/online/victim/point_to_sets.pkl"
-        with open(point_path, 'rb') as f:
-            point_to_sets = pickle.load(f)
+    datalist = victim_train_list + victim_test_list
+    point_path = f"{base_folder}/online/victim/point_to_sets.pkl"
+    with open(point_path, 'rb') as f:
+        point_to_sets = pickle.load(f)
+    point_num = int(len(datalist)/2)
+    dim_num = int(args.model_num/2)
 
-        point_num = int(len(datalist)/2)
-        dim_num = int(args.model_num/2)
-        final_results_part2_a = torch.zeros(point_num, dim_num, 1)
-        final_results_part1_a = torch.zeros(point_num, dim_num, 1)
-        final_results_part1_b = torch.zeros(point_num, dim_num, 1)
-        final_results_part2_b = torch.zeros(point_num, dim_num, 1)
+    final_results_part2_a = torch.zeros(point_num, dim_num, 1)
+    final_results_part1_a = torch.zeros(point_num, dim_num, 1)
+    final_results_part1_b = torch.zeros(point_num, dim_num, 1)
+    final_results_part2_b = torch.zeros(point_num, dim_num, 1)
 
-        for i in range(point_num):
-            models = point_to_sets[datalist[i]]
-            all_models = set(range(int(args.model_num)))
-            non_models = list(all_models - set(models))
-            final_results_part1_a[i] = results_part1[i, models]
-            final_results_part2_a[i] = results_part1[i, non_models]
+    for i in range(point_num):
+        models = point_to_sets[datalist[i]]
+        all_models = set(range(int(args.model_num)))
+        non_models = list(all_models - set(models))
+        final_results_part1_a[i] = results_part1[i, models]
+        final_results_part2_a[i] = results_part1[i, non_models]
 
-        for i in range(point_num, int(point_num*2)):
-            models = point_to_sets[datalist[i]]
-            all_models = set(range(int(args.model_num)))
-            non_models = list(all_models - set(models))
-            final_results_part1_b[i - point_num] = results_part2[i - point_num, models]
-            final_results_part2_b[i - point_num] = results_part2[i - point_num, non_models]
+    for i in range(point_num, int(point_num*2)):
+        models = point_to_sets[datalist[i]]
+        all_models = set(range(int(args.model_num)))
+        non_models = list(all_models - set(models))
+        final_results_part1_b[i - point_num] = results_part2[i - point_num, models]
+        final_results_part2_b[i - point_num] = results_part2[i - point_num, non_models]
 
 ##------------------------------------------------------------##
 
-        results_part3 = rapid_shadow_in_confidences_tensor
-        results_part4 = rapid_shadow_out_confidences_tensor
+    results_part3 = rapid_shadow_in_confidences_tensor
+    results_part4 = rapid_shadow_out_confidences_tensor
+    
+    datalist = attack_train_list + attack_test_list
+    point_path = f"{base_folder}/online/shadow/point_to_sets.pkl"
+    with open(point_path, 'rb') as f:
+        point_to_sets = pickle.load(f)
 
-        datalist = attack_train_list + attack_test_list
-        point_path = f"{base_folder}/online/shadow/point_to_sets.pkl"
-        with open(point_path, 'rb') as f:
-            point_to_sets = pickle.load(f)
+    final_results_part3_a = torch.zeros(point_num, dim_num, 1)
+    final_results_part4_a = torch.zeros(point_num, dim_num, 1)
+    final_results_part3_b = torch.zeros(point_num, dim_num, 1)
+    final_results_part4_b = torch.zeros(point_num, dim_num, 1)
+    
+    
+    for i in range(point_num):
+        models = point_to_sets[datalist[i]]
+        all_models = set(range(args.model_num))
+        non_models = list(all_models - set(models))
+        final_results_part3_a[i] = results_part3[i, models]
+        final_results_part4_a[i] = results_part3[i, non_models]
 
-        final_results_part3_a = torch.zeros(point_num, dim_num, 1)
-        final_results_part4_a = torch.zeros(point_num, dim_num, 1)
-        final_results_part3_b = torch.zeros(point_num, dim_num, 1)
-        final_results_part4_b = torch.zeros(point_num, dim_num, 1)
-        
-        
-        for i in range(point_num):
-            models = point_to_sets[datalist[i]]
-            all_models = set(range(args.model_num))
-            non_models = list(all_models - set(models))
-            final_results_part3_a[i] = results_part3[i, models]
-            final_results_part4_a[i] = results_part3[i, non_models]
+    for i in range(point_num, int(point_num*2)):
+        models = point_to_sets[datalist[i]]
+        all_models = set(range(args.model_num))
+        non_models = list(all_models - set(models))
+        final_results_part3_b[i - point_num] = results_part4[i - point_num, models]
+        final_results_part4_b[i - point_num] = results_part4[i - point_num, non_models]
 
-        for i in range(point_num, int(point_num*2)):
-            models = point_to_sets[datalist[i]]
-            all_models = set(range(args.model_num))
-            non_models = list(all_models - set(models))
-            final_results_part3_b[i - point_num] = results_part4[i - point_num, models]
-            final_results_part4_b[i - point_num] = results_part4[i - point_num, non_models]
+    model_num = int(args.model_num/2)
 
-        model_num = int(args.model_num/2)
-        our_attackers = MiaAttack(
-            victim_model, aug_victim_train_loader, aug_victim_test_loader,
-            shadow_model, aug_shadow_train_loader, aug_shadow_test_loader,
-            verify_victim_model_list=[[final_results_part2_a[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)], 
-                                      [final_results_part2_b[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)]],
-            verify_shadow_model_list=[[final_results_part4_a[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)], 
-                                      [final_results_part4_b[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)]],
-            device=device, num_cls=args.num_cls, epochs=args.attack_epochs, batch_size=args.batch_size,
-            lr=0.0002, weight_decay=5e-4, optimizer="adam", scheduler="",
-            dataset_name=args.dataset_name, model_name=args.model_name, query_num=args.query_num)
+    our_attackers = MiaAttack(
+        victim_model, aug_victim_train_loader, aug_victim_test_loader,
+        shadow_model, aug_shadow_train_loader, aug_shadow_test_loader,
+        verify_victim_model_list=[[final_results_part2_a[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)], 
+                                  [final_results_part2_b[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)]],
+        verify_shadow_model_list=[[final_results_part4_a[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)], 
+                                  [final_results_part4_b[:, :model_num].mean(dim=1, keepdim=True).squeeze(dim=1)]],
+        device=device, num_cls=args.num_cls, epochs=args.attack_epochs, batch_size=args.batch_size,
+        lr=0.0002, weight_decay=5e-4, optimizer="adam", scheduler="",
+        dataset_name=args.dataset_name, model_name=args.model_name, query_num=args.query_num)
 
     print("Start Membership Inference Attacks")
     
